@@ -1,0 +1,674 @@
+<!DOCTYPE html>
+<html lang="pt-PT">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Oficina Gerenciamento</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .login-screen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .login-box {
+            background: white;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .login-box h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .login-box p {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .login-box input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .login-box button {
+            width: 100%;
+            padding: 12px;
+            background: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .login-box button:hover {
+            background: #c0392b;
+        }
+
+        .main-screen {
+            display: none;
+        }
+
+        .header {
+            background: #e74c3c;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 28px;
+        }
+
+        .logout-btn {
+            background: white;
+            color: #e74c3c;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .logout-btn:hover {
+            background: #f0f0f0;
+        }
+
+        .form-section {
+            background: white;
+            padding: 30px;
+            border-radius: 5px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .form-section h2 {
+            margin-bottom: 20px;
+            color: #333;
+            border-bottom: 3px solid #e74c3c;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+        }
+
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .btn-add {
+            background: #e74c3c;
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            width: 100%;
+        }
+
+        .btn-add:hover {
+            background: #c0392b;
+        }
+
+        .clients-list {
+            background: white;
+            padding: 30px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .clients-list h2 {
+            margin-bottom: 20px;
+            color: #333;
+            border-bottom: 3px solid #27ae60;
+            padding-bottom: 10px;
+        }
+
+        .client-card {
+            background: #f9f9f9;
+            border-left: 5px solid #e74c3c;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+        }
+
+        .client-card h3 {
+            color: #e74c3c;
+            margin-bottom: 10px;
+        }
+
+        .client-info {
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .client-actions {
+            margin-top: 15px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-small {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn-edit {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-edit:hover {
+            background: #2980b9;
+        }
+
+        .btn-delete {
+            background: #e74c3c;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background: #c0392b;
+        }
+
+        .btn-history {
+            background: #27ae60;
+            color: white;
+            width: 100%;
+        }
+
+        .btn-history:hover {
+            background: #229954;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 5px;
+            max-width: 500px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-content h3 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .modal-buttons button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn-confirm {
+            background: #27ae60;
+            color: white;
+        }
+
+        .btn-confirm:hover {
+            background: #229954;
+        }
+
+        .btn-cancel {
+            background: #95a5a6;
+            color: white;
+        }
+
+        .btn-cancel:hover {
+            background: #7f8c8d;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #27ae60;
+            color: white;
+            padding: 15px 20px;
+            border-radius: 5px;
+            display: none;
+            z-index: 2000;
+            animation: slideIn 0.3s ease-in;
+        }
+
+        .notification.show {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+            }
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        .empty-message {
+            text-align: center;
+            color: #999;
+            padding: 40px;
+        }
+
+        .footer {
+            text-align: center;
+            color: #999;
+            margin-top: 40px;
+            padding: 20px;
+        }
+
+        .service-item {
+            background: #f0f0f0;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border-left: 4px solid #3498db;
+        }
+
+        .service-item h4 {
+            color: #333;
+            margin-bottom: 5px;
+        }
+
+        .service-item p {
+            color: #666;
+            font-size: 14px;
+            margin-bottom: 3px;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 3px 10px;
+            border-radius: 3px;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .status-concluido {
+            background: #27ae60;
+            color: white;
+        }
+
+        .status-pendente {
+            background: #f39c12;
+            color: white;
+        }
+
+        .status-agendado {
+            background: #3498db;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+<div class="login-screen" id="loginScreen">
+    <div class="login-box">
+        <h1>🔐 Oficina Gerenciamento</h1>
+        <p>Acesso Restrito</p>
+        <input type="password" id="passwordInput" placeholder="Digite a senha">
+        <button onclick="fazerLogin()">ENTRAR</button>
+    </div>
+</div>
+
+<div class="main-screen" id="mainScreen">
+    <div class="container">
+        <div class="header">
+            <h1>🚗 Oficina Gerenciamento</h1>
+            <button class="logout-btn" onclick="fazerLogout()">SAIR</button>
+        </div>
+
+        <div class="form-section">
+            <h2>➕ Adicionar Cliente</h2>
+            <div class="form-group">
+                <label>Nome do Cliente</label>
+                <input type="text" id="nome" placeholder="Ex: João Silva">
+            </div>
+            <div class="form-group">
+                <label>Matrícula do Veículo</label>
+                <input type="text" id="matricula" placeholder="Ex: AB-12-CD">
+            </div>
+            <div class="form-group">
+                <label>Quilometragem (km)</label>
+                <input type="number" id="km" placeholder="Ex: 125000">
+            </div>
+            <div class="form-group">
+                <label>Data</label>
+                <input type="date" id="data">
+            </div>
+            <div class="form-group">
+                <label>Descrição</label>
+                <textarea id="descricao" placeholder="Descrição do cliente ou serviço"></textarea>
+            </div>
+            <button class="btn-add" onclick="adicionarCliente()">ADICIONAR CLIENTE</button>
+        </div>
+
+        <div class="clients-list">
+            <h2>📋 Lista de Clientes</h2>
+            <div id="clientesList"></div>
+        </div>
+
+        <div class="footer">
+            <p>🏎️ Sistema de Gerenciamento de Oficina Automóvel 🏎️</p>
+            <p id="clienteCount">0 Clientes Registados</p>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="historyModal">
+    <div class="modal-content">
+        <h3>📋 Histórico de Serviços</h3>
+        <div id="historyContent"></div>
+        <div class="form-section" style="margin-top: 20px;">
+            <h4>Adicionar Novo Serviço</h4>
+            <div class="form-group">
+                <label>Data do Serviço</label>
+                <input type="date" id="serviceDate">
+            </div>
+            <div class="form-group">
+                <label>Tipo de Serviço</label>
+                <input type="text" id="serviceType" placeholder="Ex: Substituição de óleo">
+            </div>
+            <div class="form-group">
+                <label>Descrição</label>
+                <textarea id="serviceDesc" placeholder="Detalhes do serviço..."></textarea>
+            </div>
+            <div class="form-group">
+                <label>Custo (€)</label>
+                <input type="number" id="serviceCost" placeholder="0.00" step="0.01">
+            </div>
+            <div class="form-group">
+                <label>Status</label>
+                <select id="serviceStatus">
+                    <option value="Concluído">Concluído</option>
+                    <option value="Pendente">Pendente</option>
+                    <option value="Agendado">Agendado</option>
+                </select>
+            </div>
+            <button class="btn-add" onclick="adicionarServico()">ADICIONAR SERVIÇO</button>
+        </div>
+        <div class="modal-buttons">
+            <button class="btn-cancel" onclick="fecharHistoryModal()">Fechar</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="confirmModal">
+    <div class="modal-content">
+        <h3>⚠️ Confirmar Eliminação</h3>
+        <p>Tem certeza que deseja deletar este cliente? Esta ação não pode ser desfeita.</p>
+        <div class="modal-buttons">
+            <button class="btn-confirm" onclick="confirmarDelecao()">Deletar</button>
+            <button class="btn-cancel" onclick="cancelarDelecao()">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<div class="notification" id="notification"></div>
+
+<script>
+    const SENHA = "1234";
+    let clientes = JSON.parse(localStorage.getItem("clientes")) || [];
+    let clienteEmDelecao = null;
+    let clienteEmHistorico = null;
+
+    function fazerLogin() {
+        const senha = document.getElementById("passwordInput").value;
+        if (senha === SENHA) {
+            document.getElementById("loginScreen").style.display = "none";
+            document.getElementById("mainScreen").style.display = "block";
+            renderizarClientes();
+        } else {
+            alert("Senha incorreta!");
+        }
+    }
+
+    function fazerLogout() {
+        document.getElementById("mainScreen").style.display = "none";
+        document.getElementById("loginScreen").style.display = "flex";
+        document.getElementById("passwordInput").value = "";
+    }
+
+    function adicionarCliente() {
+        const nome = document.getElementById("nome").value || "Cliente Sem Nome";
+        const matricula = document.getElementById("matricula").value || "";
+        const km = document.getElementById("km").value || "";
+        const data = document.getElementById("data").value || "";
+        const descricao = document.getElementById("descricao").value || "";
+
+        const cliente = {
+            id: Date.now(),
+            nome,
+            matricula,
+            km,
+            data,
+            descricao,
+            servicos: []
+        };
+
+        clientes.push(cliente);
+        localStorage.setItem("clientes", JSON.stringify(clientes));
+        mostrarNotificacao("Cliente adicionado com sucesso!");
+        limparFormulario();
+        renderizarClientes();
+    }
+
+    function renderizarClientes() {
+        const lista = document.getElementById("clientesList");
+        if (clientes.length === 0) {
+            lista.innerHTML = '<div class="empty-message">Nenhum cliente cadastrado ainda. Adicione um cliente no formulário acima!</div>';
+            document.getElementById("clienteCount").textContent = "0 Clientes Registados";
+            return;
+        }
+
+        lista.innerHTML = clientes.map(cliente => `
+            <div class="client-card">
+                <h3>${cliente.nome}</h3>
+                ${cliente.matricula ? `<div class="client-info"><strong>Matrícula:</strong> ${cliente.matricula}</div>` : ""}
+                ${cliente.km ? `<div class="client-info"><strong>Quilometragem:</strong> ${cliente.km} km</div>` : ""}
+                ${cliente.data ? `<div class="client-info"><strong>Data:</strong> ${cliente.data}</div>` : ""}
+                ${cliente.descricao ? `<div class="client-info"><strong>Descrição:</strong> ${cliente.descricao}</div>` : ""}
+                <div class="client-actions">
+                    <button class="btn-small btn-edit" onclick="editarCliente(${cliente.id})">✏️ Editar</button>
+                    <button class="btn-small btn-delete" onclick="confirmarDelecaoCliente(${cliente.id})">🗑️ Deletar</button>
+                    <button class="btn-small btn-history" onclick="abrirHistorico(${cliente.id})">📋 Ver Histórico (${cliente.servicos.length})</button>
+                </div>
+            </div>
+        `).join("");
+
+        document.getElementById("clienteCount").textContent = `${clientes.length} Cliente${clientes.length !== 1 ? "s" : ""} Registado${clientes.length !== 1 ? "s" : ""}`;
+    }
+
+    function confirmarDelecaoCliente(id) {
+        clienteEmDelecao = id;
+        document.getElementById("confirmModal").classList.add("show");
+    }
+
+    function confirmarDelecao() {
+        clientes = clientes.filter(c => c.id !== clienteEmDelecao);
+        localStorage.setItem("clientes", JSON.stringify(clientes));
+        mostrarNotificacao("Cliente deletado com sucesso!");
+        document.getElementById("confirmModal").classList.remove("show");
+        renderizarClientes();
+    }
+
+    function cancelarDelecao() {
+        document.getElementById("confirmModal").classList.remove("show");
+    }
+
+    function abrirHistorico(id) {
+        clienteEmHistorico = clientes.find(c => c.id === id);
+        renderizarHistorico();
+        document.getElementById("historyModal").classList.add("show");
+    }
+
+    function renderizarHistorico() {
+        const content = document.getElementById("historyContent");
+        if (clienteEmHistorico.servicos.length === 0) {
+            content.innerHTML = '<p class="empty-message">Nenhum serviço registado ainda.</p>';
+        } else {
+            content.innerHTML = clienteEmHistorico.servicos.map((s, i) => `
+                <div class="service-item">
+                    <h4>${s.tipo}</h4>
+                    <p><strong>Data:</strong> ${s.data}</p>
+                    <p><strong>Descrição:</strong> ${s.descricao}</p>
+                    <p><strong>Custo:</strong> €${s.custo}</p>
+                    <p><span class="status-badge status-${s.status.toLowerCase()}">${s.status}</span></p>
+                    <button class="btn-small btn-delete" onclick="deletarServico(${i})" style="margin-top: 10px;">🗑️ Deletar</button>
+                </div>
+            `).join("");
+        }
+    }
+
+    function adicionarServico() {
+        const data = document.getElementById("serviceDate").value;
+        const tipo = document.getElementById("serviceType").value;
+        const descricao = document.getElementById("serviceDesc").value;
+        const custo = document.getElementById("serviceCost").value;
+        const status = document.getElementById("serviceStatus").value;
+
+        if (!tipo) {
+            alert("Por favor, preencha o tipo de serviço!");
+            return;
+        }
+
+        clienteEmHistorico.servicos.push({
+            data,
+            tipo,
+            descricao,
+            custo,
+            status
+        });
+
+        localStorage.setItem("clientes", JSON.stringify(clientes));
+        mostrarNotificacao("Serviço adicionado com sucesso!");
+        document.getElementById("serviceDate").value = "";
+        document.getElementById("serviceType").value = "";
+        document.getElementById("serviceDesc").value = "";
+        document.getElementById("serviceCost").value = "";
+        renderizarHistorico();
+    }
+
+    function deletarServico(index) {
+        clienteEmHistorico.servicos.splice(index, 1);
+        localStorage.setItem("clientes", JSON.stringify(clientes));
+        mostrarNotificacao("Serviço deletado com sucesso!");
+        renderizarHistorico();
+    }
+
+    function fecharHistoryModal() {
+        document.getElementById("historyModal").classList.remove("show");
+    }
+
+    function limparFormulario() {
+        document.getElementById("nome").value = "";
+        document.getElementById("matricula").value = "";
+        document.getElementById("km").value = "";
+        document.getElementById("data").value = "";
+        document.getElementById("descricao").value = "";
+    }
+
+    function mostrarNotificacao(mensagem) {
+        const notif = document.getElementById("notification");
+        notif.textContent = mensagem;
+        notif.classList.add("show");
+        setTimeout(() => notif.classList.remove("show"), 3000);
+    }
+
+    function editarCliente(id) {
+        alert("Funcionalidade de edição em desenvolvimento!");
+    }
+
+    document.getElementById("data").valueAsDate = new Date();
+    document.getElementById("serviceDate").valueAsDate = new Date();
+</script>
+
+</body>
+</html>
